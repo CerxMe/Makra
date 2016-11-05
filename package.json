@@ -1,0 +1,17 @@
+{
+  "name": "makra",
+  "version": "0.0.1",
+  "description": "Discord bot for creating message macros",
+  "main": "app.js",
+  "dependencies": {
+    "discord.js": "^10.0.1",
+    "mongorito": "^2.1.2",
+    "npm": "^3.10.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "check"
+  },
+  "author": "https://cerx.pw",
+  "license": "ISC"
+}
