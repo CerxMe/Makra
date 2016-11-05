@@ -5,6 +5,7 @@ Written with Node.js, relies on Discord.js library and Mongorito to store the da
 
 
 _$m create help_
+
 **Creating macros**
 So, you want to create macros? Don't you worry, it's simple!
 Use the `$m create <NAME> <CONTENT>`. If you would like to use a macro name with spaces in it, enclose it with "" <- theese guys. Here's an example `$m create "<NAME WITH SPACES>" <CONTENT>` 
