@@ -4,7 +4,7 @@
   "description": "Discord bot for creating message macros",
   "main": "app.js",
   "dependencies": {
-    "discord.js": "^10.0.1",
+    "discord.js": "^11.0.0",
     "mongorito": "^2.1.2",
     "npm": "^3.10.9"
   },
