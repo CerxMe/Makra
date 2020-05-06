@@ -1,8 +1,9 @@
 #Makra
-_Simple Discord bot for creating text macros!_
+_Discord bot for creating text macros!_
 
-Written with Node.js, relies on Discord.js library and Mongorito to store the data in MongoDB. 
+Rewrote from scratch for Node 14.
 
+___
 
 _$m create help_
 
