@@ -1,14 +1,15 @@
-import { Model, DataTypes } from 'sequelize'
+import Sequelize from 'sequelize'
+const { Model, DataTypes } = Sequelize
 
-export default async function (sequelize) {
+export async function init (sequelize) {
   class Macro extends Model {}
   Macro.init({
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      autoIncrement: true
+      defaultValue: DataTypes.UUIDV4
     },
-    description: DataTypes.TEXT
+    content: DataTypes.TEXT
   }, { sequelize, modelName: 'Macro' })
   return Macro
 }

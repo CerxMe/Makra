@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize'
+import loadModels from './models/index.js'
 
 export default async function () {
   try {
@@ -10,8 +11,14 @@ export default async function () {
       dialect: process.env.DATABASE_DIALECT
     })
 
+    // test connection
     await sequelize.authenticate()
-    console.log('yay')
+    console.log('Database connection authenticated')
+
+    // load up models
+    await loadModels(sequelize)
+    console.log('All models loaded')
+
     return sequelize
   } catch (err) {
     console.log(err)

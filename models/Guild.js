@@ -1,13 +1,20 @@
-import { Model, DataTypes } from 'sequelize'
+import Sequelize from 'sequelize'
+const { Model, DataTypes } = Sequelize
 
-export default async function (sequelize) {
+// model definition
+export async function init (sequelize) {
   class Guild extends Model {}
-  Guild.init({
-    id: {
+
+  await Guild.init({
+    discordId: {
       type: DataTypes.STRING,
       unique: true
     },
     description: DataTypes.TEXT
-  }, { sequelize, modelName: 'Macro' })
+  }, { sequelize, modelName: 'Guild' })
   return Guild
+}
+
+export async function associate (sequelize) {
+  // TODO
 }
