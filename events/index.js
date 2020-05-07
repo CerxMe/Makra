@@ -5,5 +5,5 @@ import message from './message.js'
 
 export default async function (client) {
   client.on('ready', () => ready(client))
-  client.on('message', () => message(client))
+  client.on('message', (msg) => message(client, msg))
 }
