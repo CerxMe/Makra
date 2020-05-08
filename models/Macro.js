@@ -1,15 +1,24 @@
 import Sequelize from 'sequelize'
-const { Model, DataTypes } = Sequelize
 
 export async function init (sequelize) {
-  class Macro extends Model {}
+  class Macro extends Sequelize.Model {}
   Macro.init({
     id: {
-      type: DataTypes.UUID,
+      type: Sequelize.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: Sequelize.UUIDV4
     },
-    content: DataTypes.TEXT
-  }, { sequelize, modelName: 'Macro' })
+    name: {
+      type: Sequelize.TEXT,
+      unique: true,
+      allowNull: false
+    },
+    content: Sequelize.TEXT
+  }, { sequelize, modelName: 'macro' })
   return Macro
+}
+
+export async function associate (models, sequelize) {
+  models.get('macro').belongsTo(models.get('guild'))
+  models.get('macro').belongsTo(models.get('author'))
 }

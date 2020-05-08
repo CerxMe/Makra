@@ -10,12 +10,12 @@ export default function (client, message) {
   const args = message.content.slice(prefix.length).split(/ +/)
   const commandName = args.shift().toLowerCase()
 
-  const command = client.commands.find(cmd => cmd.name || (cmd.aliases && cmd.aliases.includes(commandName)))
+  const command = client.commands.find(cmd => cmd.name === commandName || (cmd.aliases && cmd.aliases.includes(commandName)))
 
   if (!command) return
 
   try {
-    command.run(client, message)
+    command.run(client, message, { prefix, commandName })
   } catch (error) {
     console.error(error)
     message.reply('There was an error trying to execute that command!')

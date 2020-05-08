@@ -2,7 +2,6 @@ import Discord from 'discord.js'
 import dotenv from 'dotenv'
 import eventHandler from './events/index.js'
 import databaseConnection from './db.js'
-
 import loadCommands from './commands/index.js'
 
 // initialization
@@ -15,7 +14,7 @@ import loadCommands from './commands/index.js'
     const client = new Discord.Client()
 
     // establish database connection and do data things
-    client.db = await databaseConnection()
+    client.db = await databaseConnection(client)
 
     // register command files
     client.commands = await loadCommands(client)
