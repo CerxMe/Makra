@@ -1,5 +1,6 @@
 import { MessageEmbed } from 'discord.js'
 import { getMacroName } from '../util/extractMacro.js'
+import { escapeMacroName } from '../util/escapeMacro.js'
 
 export const attributes = {
   name: 'deleteMacro',
@@ -8,13 +9,24 @@ export const attributes = {
 
 // delete macro and all things related
 export async function run (client, message, extra) {
-  const macroName = getMacroName(message, extra)
+  const macrostr = getMacroName(message, extra)
+  const macroName = escapeMacroName(macrostr)
+
+  // fuck backticks
+  if (macroName.replace(/`/g, '!`').length !== macroName.length) {
+    const reply = new MessageEmbed()
+      .setAuthor('Macro name can\'t have backtick!')
+      .setDescription('Macros cannot contain the backtick (\`) character.')
+      .setColor('F42C04')
+    await message.channel.send('', reply)
+    return
+  }
 
   // search for macro
   const macro = await client.db.models.get('macro').findOne({
     include: client.db.models.get('author'),
     where: {
-      name: macroName,
+      name: macrostr,
       guildDiscordId: message.guild.id
     }
   })

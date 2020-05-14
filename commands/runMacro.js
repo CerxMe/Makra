@@ -1,8 +1,10 @@
 import { MessageEmbed } from 'discord.js'
 import { getMacroName } from '../util/extractMacro.js'
+import { escapeMacroName, escapeMacroContent } from '../util/escapeMacro.js'
 
 export default async function (client, message, extra) {
-  const macroName = getMacroName(message, extra)
+  const macrostr = getMacroName(message, extra)
+  const macroName = escapeMacroName(macrostr)
 
   // empty message calls help command
   if (!macroName) {
@@ -22,8 +24,16 @@ export default async function (client, message, extra) {
   if (macro) {
     // send macro
     // TODO: bump stats
-    message.channel.send(`${macro.content}`)
+    message.channel.send(`${escapeMacroContent(macro.content)}`)
   } else {
+    if (macroName.replace(/`/g, '!`').length !== macroName.length) {
+      const reply = new MessageEmbed()
+        .setAuthor('Macro name can\'t have backtick!')
+        .setDescription('Macros cannot contain the backtick (\`) character.')
+        .setColor('F42C04')
+      await message.channel.send('', reply)
+      return
+    }
     // no macro
     const reply = new MessageEmbed()
       .setAuthor('Macro was not found!')

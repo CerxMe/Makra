@@ -1,6 +1,9 @@
+import { clean } from './escapeMacro.js'
+import { Util } from 'discord.js'
+
 export function getFullMacro (message, extra) {
   // get msg string without the command
-  const msg = message.content.slice(extra.prefix.length + extra.commandName.length)
+  const msg = Util.cleanContent(message.content, message).slice(extra.prefix.length + extra.commandName.length)
     .replace(/^(\s*)/, '') // get rid of the whitespace left behind
 
   // Extract macro name and content from msg string
@@ -17,31 +20,38 @@ export function getFullMacro (message, extra) {
     content = content.replace(macrostr, '')
   }
 
-  macrostr = macrostr.toLocaleLowerCase() // TODO: Setting to disable this
+  macrostr = macrostr.toLocaleLowerCase().trim() // TODO: Setting to disable this
   content = content.replace(/^(\s*)/, '') // get rid of the whitespace left behind
   return { macrostr, content }
 }
 
 export function getMacroName (message, extra) {
+  // get msg string without the command
+  let macrostr
   if (extra.commandName) {
-    // get msg string without the command
-    const msg = message.content.slice(extra.prefix.length + extra.commandName.length)
+    const msg = Util.cleanContent(message.content, message).slice(extra.prefix.length + extra.commandName.length)
       .replace(/^(\s*)/, '') // get rid of the whitespace left behind
-
     // Extract macro name from msg
-    let macrostr
     if (/^".*"/.test(msg)) {
       // Macro is a string with spaces
       macrostr = /".*"/.exec(msg)[0]
       macrostr = macrostr.slice(1, -1) // remove the ""
     } else {
       // Single string, stops when a space is spotted
-      macrostr = /[^ ]*/.exec(msg)[0]
+      macrostr = msg.trim()
     }
-    return macrostr
+    return macrostr.toLocaleLowerCase()
   } else { // run command
-    const { prefix } = extra
-    const macroName = message.content.slice(prefix.length).trim()
-    return macroName
+    const msg = Util.cleanContent(message.content, message).slice(extra.prefix.length)
+      .replace(/^(\s*)/, '') // get rid of the whitespace left behind
+    if (/^".*"/.test(msg)) {
+      // Macro is a string with spaces
+      macrostr = /".*"/.exec(msg)[0]
+      macrostr = clean(macrostr.slice(1, -1), message).toLocaleLowerCase() // remove the ""
+      return macrostr
+    } else {
+      const macroName = Util.cleanContent(message.content, message).slice(extra.prefix.length).trim().toLocaleLowerCase()
+      return macroName
+    }
   }
 }

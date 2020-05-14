@@ -1,5 +1,7 @@
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed, Util } from 'discord.js'
 import { getFullMacro } from '../util/extractMacro.js'
+import { escapeMacroName } from '../util/escapeMacro.js'
+
 export const attributes = {
   name: 'createMacro',
   aliases: ['create', 'c', 'new', 'set', 'make']
@@ -9,8 +11,8 @@ export const attributes = {
 export async function run (client, message, extra) {
   // Get macro from msg
   const { macrostr, content } = getFullMacro(message, extra)
+  const macroName = escapeMacroName(macrostr)
 
-  console.log(content)
   // Macro can't be empty
   if (!macrostr) {
     const reply = new MessageEmbed()
@@ -20,10 +22,20 @@ export async function run (client, message, extra) {
     await message.channel.send('', reply)
     return
   }
+  // Macro name can't use backticks
+  else if (macrostr.replace(/`/g, '!`').length !== macrostr.length) {
+    const reply = new MessageEmbed()
+      .setAuthor('Macro name can\'t have backtick!')
+      .setDescription('Macros cannot contain the backtick (\`) character. Please choose a different name.')
+      .setColor('F42C04')
+    await message.channel.send('', reply)
+    return
+  }
+
   if (!content) {
     const reply = new MessageEmbed()
       .setAuthor('Macro content can\'t be empty!')
-      .setDescription(`No <CONTENT> was provided for *${macrostr}*. Use \`$mhelp\` for help.`)
+      .setDescription(`No <CONTENT> was provided for *${macroName}*. Use \`$mhelp\` for help.`)
       .setColor('F42C04')
     await message.channel.send('', reply)
     return
@@ -57,7 +69,7 @@ export async function run (client, message, extra) {
     if (found) {
       const reply = new MessageEmbed()
         .setAuthor('Macro set!')
-        .setDescription(`Use \`$m ${macrostr}\` to run your macro.`)
+        .setDescription(`Use \`$m ${macroName}\` to run your macro.`)
         .setColor('E58C8A')
         .setFooter(`${macro.dataValues.id}`)
       await message.channel.send('', reply)
@@ -65,7 +77,7 @@ export async function run (client, message, extra) {
       // new macro was created
       const reply = new MessageEmbed()
         .setAuthor('Macro already exists!')
-        .setDescription(`\`$m ${macrostr}\` is originally created by <@${macro.author.discordId}>.\n Inspect it with \`$minspect ${macrostr}\` for more information or use \`$mhelp\` for help.`)
+        .setDescription(`\`$m ${macroName}\` is originally created by <@${macro.author.discordId}>.\n Inspect it with \`$minspect ${macroName}\` for more information or use \`$mhelp\` for help.`)
         .setColor('F42C04')
         .setFooter(`${macro.dataValues.id}`)
       await message.channel.send('', reply)
