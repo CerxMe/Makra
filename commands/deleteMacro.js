@@ -4,5 +4,5 @@ export const attributes = {
 }
 
 export async function run (client, message) {
-  message.reply('pong!')
+  const admin = message.channel.permissionsFor(message.member).hasPermission('MANAGE_MESSAGES') // checks for admin permissions
 }

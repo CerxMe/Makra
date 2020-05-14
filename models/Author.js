@@ -3,13 +3,9 @@ import Sequelize from 'sequelize'
 export async function init (sequelize) {
   class Author extends Sequelize.Model {}
   Author.init({
-    id: {
-      type: Sequelize.UUID,
-      primaryKey: true,
-      defaultValue: Sequelize.UUIDV4
-    },
     discordId: {
       type: Sequelize.STRING,
+      primaryKey: true,
       allowNull: false
     }
   }, { sequelize, modelName: 'author' })

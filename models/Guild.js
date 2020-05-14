@@ -5,14 +5,9 @@ export async function init (sequelize) {
   class Guild extends Sequelize.Model {}
 
   await Guild.init({
-    id: {
-      type: Sequelize.UUID,
-      primaryKey: true,
-      defaultValue: Sequelize.UUIDV4
-    },
     discordId: {
       type: Sequelize.STRING,
-      unique: true,
+      primaryKey: true,
       allowNull: false
     },
     description: Sequelize.TEXT

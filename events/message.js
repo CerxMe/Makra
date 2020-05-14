@@ -1,4 +1,5 @@
 // Command handler
+import runMacro from './runMacro.js'
 export default function (client, message) {
   // Ignore Direct Messages and bot users
   if (message.channel.type !== 'text' || message.author.bot) return
@@ -12,8 +13,18 @@ export default function (client, message) {
 
   const command = client.commands.find(cmd => cmd.name === commandName || (cmd.aliases && cmd.aliases.includes(commandName)))
 
-  if (!command) return
+  // try to execute macro
+  if (!command) {
+    try {
+      runMacro(client, message, { prefix, args })
+    } catch (error) {
+      console.error(error)
+      message.reply('There was an error trying to execute that command!')
+    }
+    return
+  }
 
+  // run command
   try {
     command.run(client, message, { prefix, commandName })
   } catch (error) {

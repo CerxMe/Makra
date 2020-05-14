@@ -10,7 +10,6 @@ export async function init (sequelize) {
     },
     name: {
       type: Sequelize.TEXT,
-      unique: true,
       allowNull: false
     },
     content: Sequelize.TEXT
@@ -21,4 +20,30 @@ export async function init (sequelize) {
 export async function associate (models, sequelize) {
   models.get('macro').belongsTo(models.get('guild'))
   models.get('macro').belongsTo(models.get('author'))
+  //
+  // // auto-fill author if they don't exist
+  // models.get('macro')
+  //   .beforeCreate(async (val, options) => {
+  //     // // get guild
+  //     // const guild = await models.get('guild').findOrCreate(
+  //     //   {
+  //     //     where: { discordId: options.defaults.guild.id },
+  //     //     defaults: { description: options.defaults.guild.name }
+  //     //   }).spread((found, created) => {
+  //     //   return found
+  //     // })
+  //     // delete options.defaults.guild
+  //     // val.guildId = guild.get('id')
+  //     console.log(options.defaults.author)
+  //     // get author
+  //     const author = await models.get('author').findOrCreate(
+  //       {
+  //         where: { discordId: options.defaults.author.discordId }
+  //       }).spread((found, created) => {
+  //       return found
+  //     })
+  //     delete options.defaults.author
+  //     val.authorId = author.get('id')
+  //     return { val, options }
+  //   })
 }
