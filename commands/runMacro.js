@@ -1,13 +1,18 @@
-// Command handler
 import { MessageEmbed } from 'discord.js'
+import { getMacroName } from '../util/extractMacro.js'
 
 export default async function (client, message, extra) {
-  const { prefix } = extra
-  const macroName = message.content.slice(prefix.length).trim()
+  const macroName = getMacroName(message, extra)
+  console.log(macroName)
+  // TODO: empty message calls help command
+  if (!macroName) {
+    const helpCommand = client.commands.get('help')
+    helpCommand.run(client, message)
+    return
+  }
 
   // search for macro
   const macro = await client.db.models.get('macro').findOne({
-    include: client.db.models.get('author'),
     where: {
       name: macroName,
       guildDiscordId: message.guild.id
@@ -19,6 +24,7 @@ export default async function (client, message, extra) {
     // TODO: bump stats
     message.channel.send(`${macro.content}`)
   } else {
+    // no macro
     const reply = new MessageEmbed()
       .setAuthor('Macro was not found!')
       .setDescription(`Create it with \`$mcreate ${

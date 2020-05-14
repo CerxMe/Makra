@@ -1,5 +1,5 @@
-import extractMacroFromMessage from '../util/extractMacroFromMessage.js'
 import { MessageEmbed } from 'discord.js'
+import { getFullMacro } from '../util/extractMacro.js'
 export const attributes = {
   name: 'createMacro',
   aliases: ['create', 'c', 'new']
@@ -8,7 +8,7 @@ export const attributes = {
 // Create new macro
 export async function run (client, message, extra) {
   // Get macro from msg
-  const { macrostr, content } = extractMacroFromMessage(message, extra)
+  const { macrostr, content } = getFullMacro(message, extra)
 
   console.log(content)
   // Macro can't be empty
@@ -29,7 +29,7 @@ export async function run (client, message, extra) {
   const author = await client.db.models.get('author').findOrCreate({
     where: { discordId: message.author.id }
   })
-  if (guild[0]) {
+  if (guild[0] && author[0]) {
     const { macro, found } = await client.db.models.get('macro').findOrCreate({
       include: client.db.models.get('author'),
       where: {
@@ -49,35 +49,18 @@ export async function run (client, message, extra) {
     if (found) {
       const reply = new MessageEmbed()
         .setAuthor('Macro set!')
+        .setDescription(`Use \`$m ${macrostr}\` to run your macro.`)
         .setColor('89d2dc')
         .setFooter(`${macro.dataValues.id}`)
       await message.channel.send('', reply)
-    } else { // new macro was created
+    } else {
+      // new macro was created
       const reply = new MessageEmbed()
         .setAuthor('Macro already exists!')
-        .setDescription(`Created by <@${macro.author.discordId}>`)
+        .setDescription(`\`$m ${macrostr}\` is originally created by <@${macro.author.discordId}>.\n Inspect it with \`$minspect ${macrostr}\` for more information.`)
         .setColor('101D42')
         .setFooter(`${macro.dataValues.id}`)
       await message.channel.send('', reply)
     }
   }
-  /*
-  const { found, macro } = await client.db.models.get('macro').findOrCreate({
-    where: { name: macrostr },
-    defaults: {
-      guild: message.guild,
-      author: message.author,
-      content
-    }
-  }).spread((found, created) => {
-    return { found, created }
-  })
-
-  if (found) {
-    message.channel.send(`${macro.get('id')}`)
-  }
-  */
-
-  // message.channel.send(`${macro.get('id')}`)
-  message.channel.send(`macrostr = \`${macrostr}\`\ncontent = \`${content}\``)
 }

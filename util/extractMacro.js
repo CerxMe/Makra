@@ -1,4 +1,4 @@
-export default function (message, extra) {
+export function getFullMacro (message, extra) {
   // get msg string without the command
   const msg = message.content.slice(extra.prefix.length + extra.commandName.length)
     .replace(/^(\s*)/, '') // get rid of the whitespace left behind
@@ -20,4 +20,28 @@ export default function (message, extra) {
   macrostr = macrostr.toLocaleLowerCase() // TODO: Setting to disable this
   content = content.replace(/^(\s*)/, '') // get rid of the whitespace left behind
   return { macrostr, content }
+}
+
+export function getMacroName (message, extra) {
+  if (extra.commandName) {
+    // get msg string without the command
+    const msg = message.content.slice(extra.prefix.length + extra.commandName.length)
+      .replace(/^(\s*)/, '') // get rid of the whitespace left behind
+
+    // Extract macro name from msg
+    let macrostr
+    if (/^".*"/.test(msg)) {
+      // Macro is a string with spaces
+      macrostr = /".*"/.exec(msg)[0]
+      macrostr = macrostr.slice(1, -1) // remove the ""
+    } else {
+      // Single string, stops when a space is spotted
+      macrostr = /[^ ]*/.exec(msg)[0]
+    }
+    return macrostr
+  } else { // run command
+    const { prefix } = extra
+    const macroName = message.content.slice(prefix.length).trim()
+    return macroName
+  }
 }

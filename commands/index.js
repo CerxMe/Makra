@@ -4,7 +4,7 @@ import { Collection } from 'discord.js'
 // register bot commands
 export default async function (client) {
   const commandFiles = fs.readdirSync('./commands')
-    .filter(file => file !== 'index.js') // Exclude this file.
+    .filter(file => file !== 'index.js' && file !== 'runMacro.js') // Exclude this file & runMacro (is handled from message event)
 
   const commands = new Collection()
   for (const file of commandFiles) {

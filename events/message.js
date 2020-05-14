@@ -1,5 +1,5 @@
 // Command handler
-import runMacro from './runMacro.js'
+import runMacro from '../commands/runMacro.js'
 export default function (client, message) {
   // Ignore Direct Messages and bot users
   if (message.channel.type !== 'text' || message.author.bot) return
