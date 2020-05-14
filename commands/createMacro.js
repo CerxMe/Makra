@@ -2,7 +2,7 @@ import { MessageEmbed } from 'discord.js'
 import { getFullMacro } from '../util/extractMacro.js'
 export const attributes = {
   name: 'createMacro',
-  aliases: ['create', 'c', 'new']
+  aliases: ['create', 'c', 'new', 'set', 'make']
 }
 
 // Create new macro
@@ -12,11 +12,19 @@ export async function run (client, message, extra) {
 
   console.log(content)
   // Macro can't be empty
+  if (!macrostr) {
+    const reply = new MessageEmbed()
+      .setAuthor('Macro name can\'t be empty!')
+      .setDescription('No <NAME> was provided for a macro. Use `$mhelp` for help.')
+      .setColor('F42C04')
+    await message.channel.send('', reply)
+    return
+  }
   if (!content) {
     const reply = new MessageEmbed()
-      .setAuthor('Macro can\'t be empty!')
-      .setDescription(`No <MACROCONTENT> was provided for *${macrostr}*. Use \`$mhelp\` for help.`)
-      .setColor('101D42')
+      .setAuthor('Macro content can\'t be empty!')
+      .setDescription(`No <CONTENT> was provided for *${macrostr}*. Use \`$mhelp\` for help.`)
+      .setColor('F42C04')
     await message.channel.send('', reply)
     return
   }
@@ -50,15 +58,15 @@ export async function run (client, message, extra) {
       const reply = new MessageEmbed()
         .setAuthor('Macro set!')
         .setDescription(`Use \`$m ${macrostr}\` to run your macro.`)
-        .setColor('89d2dc')
+        .setColor('E58C8A')
         .setFooter(`${macro.dataValues.id}`)
       await message.channel.send('', reply)
     } else {
       // new macro was created
       const reply = new MessageEmbed()
         .setAuthor('Macro already exists!')
-        .setDescription(`\`$m ${macrostr}\` is originally created by <@${macro.author.discordId}>.\n Inspect it with \`$minspect ${macrostr}\` for more information.`)
-        .setColor('101D42')
+        .setDescription(`\`$m ${macrostr}\` is originally created by <@${macro.author.discordId}>.\n Inspect it with \`$minspect ${macrostr}\` for more information or use \`$mhelp\` for help.`)
+        .setColor('F42C04')
         .setFooter(`${macro.dataValues.id}`)
       await message.channel.send('', reply)
     }

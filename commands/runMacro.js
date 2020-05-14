@@ -3,8 +3,8 @@ import { getMacroName } from '../util/extractMacro.js'
 
 export default async function (client, message, extra) {
   const macroName = getMacroName(message, extra)
-  console.log(macroName)
-  // TODO: empty message calls help command
+
+  // empty message calls help command
   if (!macroName) {
     const helpCommand = client.commands.get('help')
     helpCommand.run(client, message)
@@ -30,9 +30,8 @@ export default async function (client, message, extra) {
       .setDescription(`Create it with \`$mcreate ${
         macroName.replace(' ', '').length !== macroName.length // has spaces?
           ? `"${macroName}"` : macroName // wrap in double quotes / use raw
-      } <MACROCONTENT>\` command.`)
-      .setFooter('Use $mhelp for help.')
-      .setColor('101D42')
+      } <CONTENT>\` or use \`$mhelp\` for help.`)
+      .setColor('0F1A20')
     await message.channel.send('', reply)
   }
 }
