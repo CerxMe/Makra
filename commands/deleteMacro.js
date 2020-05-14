@@ -84,10 +84,7 @@ export async function run (client, message, extra) {
     // send confirmation
     const reply = new MessageEmbed()
       .setAuthor('Macro has been deleted!')
-      .setDescription(`Sucessfuly removed macro \`${
-        macroName.replace(' ', '').length !== macroName.length // has spaces?
-          ? `"${macroName}"` : macroName // wrap in double quotes / use raw
-      }\`${ // admin override?
+      .setDescription(`Sucessfuly removed macro \`$m ${macroName}\`${ // admin override?
         macro.author.discordId !== message.author.id && admin ? ` by <@${macro.author.discordId}>` : ''
       }${ // deleted macro only?
         authorHasMoreMacros && guildHasMoreMacros ? '.'

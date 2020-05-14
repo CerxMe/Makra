@@ -1,4 +1,3 @@
-import { clean } from './escapeMacro.js'
 import { Util } from 'discord.js'
 
 export function getFullMacro (message, extra) {
@@ -47,7 +46,7 @@ export function getMacroName (message, extra) {
     if (/^".*"/.test(msg)) {
       // Macro is a string with spaces
       macrostr = /".*"/.exec(msg)[0]
-      macrostr = clean(macrostr.slice(1, -1), message).toLocaleLowerCase() // remove the ""
+      macrostr = macrostr.slice(1, -1).toLocaleLowerCase() // remove the ""
       return macrostr
     } else {
       const macroName = Util.cleanContent(message.content, message).slice(extra.prefix.length).trim().toLocaleLowerCase()

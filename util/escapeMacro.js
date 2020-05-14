@@ -1,7 +1,4 @@
 import { Util } from 'discord.js'
-export function clean (text) {
-  return Util.cleanContent(text)
-}
 export function escapeMacroName (macroName) {
   return Util.escapeMarkdown(macroName)
 }
