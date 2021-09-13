@@ -5,8 +5,8 @@
   "main": "app.js",
   "dependencies": {
     "discord.js": "^10.0.1",
-    "mongorito": "^2.1.2",
-    "npm": "^3.10.9"
+    "mongorito": "^3.0.0",
+    "npm": "^6.2.0"
   },
   "devDependencies": {},
   "scripts": {
